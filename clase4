@@ -1,0 +1,17 @@
+create or replace procedure guardar_persona(my_id OUT integer, my_nombre IN varchar2, my_edad IN integer)
+as
+begin
+select sec_persona.nextval INTO my_id from DUAL;
+insert into persona values(my_id, my_nombre, my_edad);
+END;
+/
+
+
+declare
+valor integer;
+begin
+guardar_persona(valor, 'Juan', 23);
+end;
+/
+
+select *from persona;
