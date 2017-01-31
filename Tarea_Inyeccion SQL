@@ -1,0 +1,48 @@
+INYECCIÓN SQL
+Inyección SQL es un método de infiltración de código intruso que se vale de una vulnerabilidad informática presente en una aplicación en 
+el nivel de validación de las entradas para realizar operaciones sobre una base de datos.
+El origen de la vulnerabilidad radica en el incorrecto chequeo o filtrado de las variables utilizadas en un programa que contiene, 
+o bien genera, código SQL. Es, de hecho, un error de una clase más general de vulnerabilidades que puede ocurrir en cualquier lenguaje de 
+programación o script que esté embebido dentro de otro.
+Se dice que existe o se produjo una inyección SQL cuando, de alguna manera, se inserta o "inyecta" código SQL invasor dentro del código 
+SQL programado, a fin de alterar el funcionamiento normal del programa y lograr así que se ejecute la porción de código "invasor" 
+incrustado, en la base de datos.
+Este tipo de intrusión normalmente es de carácter malicioso, dañino o espía, por tanto es un problema de seguridad informática, y debe ser 
+tomado en cuenta por el programador de la aplicación para poder prevenirlo. Un programa elaborado con descuido, displicencia o con 
+ignorancia del problema, podrá resultar ser vulnerable, y la seguridad del sistema (base de datos) podrá quedar eventualmente 
+comprometida.
+La intrusión ocurre durante la ejecución del programa vulnerable, ya sea, en computadores de escritorio o bien en sitios Web, en este 
+último caso obviamente ejecutándose en el servidor que los aloja.
+La vulnerabilidad se puede producir automáticamente cuando un programa "arma descuidadamente" una sentencia SQL en tiempo de ejecución, 
+o bien durante la fase de desarrollo, cuando el programador explicita la sentencia SQL a ejecutar en forma desprotegida. En cualquier 
+caso,siempre que el programador necesite y haga uso de parámetros a ingresar por parte del usuario, a efectos de consultar una base 
+de datos; ya que, justamente, dentro de los parámetros es donde se puede incorporar el código SQL intruso.
+Al ejecutarse la consulta en la base de datos, el código SQL inyectado también se ejecutará y podría hacer un sinnúmero de cosas, 
+como insertar registros, modificar o eliminar datos, autorizar accesos e, incluso, ejecutar otro tipo de código malicioso en el 
+computador.
+
+
+PORQUE NO ES BUENO UTILIZAR INSERT, SELECT, UPDATE Y DELETE
+Por ejemplo, asumiendo que el siguiente código reside en una aplicación web y que existe un parámetro "nombreUsuario" que 
+contiene el nombre de usuario a consultar, una inyección SQL se podría provocar de la siguiente forma:
+El código SQL original y vulnerable es:
+consulta := "SELECT * FROM usuarios WHERE nombre = '" + nombreUsuario + "';"
+Si el operador escribe un nombre, por ejemplo "Alicia", nada anormal sucederá, la aplicación generaría una sentencia SQL similar 
+a la siguiente, que es perfectamente correcta, en donde se seleccionarían todos los registros con el nombre "Alicia" en la base 
+de datos:
+SELECT * FROM usuarios WHERE nombre = 'Alicia';
+Pero si un operador malintencionado escribe como nombre de usuario a consultar:
+Alicia'; DROP TABLE usuarios; SELECT * FROM datos WHERE nombre LIKE '%
+, se generaría la siguiente consulta SQL, (el color verde es lo que pretende el programador, el azul es el dato, y el rojo, 
+el código SQL inyectado):
+SELECT * FROM usuarios WHERE nombre = 'Alicia';
+DROP TABLE usuarios;
+SELECT * FROM datos WHERE nombre LIKE '%';
+En la base de datos se ejecutaría la consulta en el orden dado, se seleccionarían todos los registros con el nombre 'Alicia', 
+se borraría la tabla 'usuarios' y finalmente se seleccionaría toda la tabla "datos", que no debería estar disponible para los 
+usuarios web comunes.
+En resumen, cualquier dato de la base de datos puede quedar disponible para ser leído o modificado por un usuario malintencionado.
+Nótese por qué se llama "Inyección" SQL. Si se observa el código malicioso, de color rojo, se notará que está insertado en el 
+medio del código bueno, el verde. Así, el código rojo ha sido "inyectado" dentro del verde.
+La inyección SQL es fácil de evitar, por parte del programador, en la mayoría de los lenguajes de programación que permiten 
+desarrollar aplicaciones web. En la siguiente sección se trata brevemente ese tema.
