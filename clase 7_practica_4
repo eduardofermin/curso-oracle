@@ -1,0 +1,42 @@
+set serveroutput on;
+
+create table peliculas(id_pelicula integer, titulo varchar2(10), sinopsis varchar2(20), constraint pk_id_pelicula primary key(id_pelicula));
+
+create table horario(id_horario integer, fecha date, id_pelicula integer, constraint pk_id_horario primary key (id_horario), constraint fk1_id_pelicula foreign key (id_pelicula) 
+references peliculas(id_pelicula));
+
+create table sala(num_sala integer, id_pelicula integer, constraint pk_num_sala primary key (num_sala), constraint fk2_id_pelicula foreign key (id_pelicula)
+references peliculas(id_pelicula));
+
+create sequence sec_pelicula
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_horario
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace procedure guardar_peliculas(my_id_pelicula out integer, my_titulo in varchar2, my_sinopsis in varchar2)
+as
+begin
+select sec_pelicula.nextval into my_id_pelicula from dual;
+insert into peliculas values (my_id_pelicula, my_titulo, my_sinopsis);
+end;
+/
+
+create or replace procedure guardar_sala(my_num_sala in integer, my_id_pelicula in integer)
+as
+begin
+insert into sala values (my_num_sala, my_id_pelicula);
+end;
+/
+
+create or replace procedure guardar_horario(my_id_horario out integer, my_fecha in date, my_id_pelicula in integer)
+as 
+begin
+select sec_horario.nextval into my_id_horario from dual;
+insert into peliculas values(my_id_horario, my_fecha, my_id_pelicula);
+end;
+/
