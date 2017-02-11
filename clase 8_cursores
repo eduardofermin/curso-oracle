@@ -24,3 +24,23 @@ if rec.edad<18 then
 end loop;
 end;
 /
+
+------------------------------------------------------
+ejercicio 2
+
+set serveroutput on;
+create table trabajador(seguro_social integer, nombre varchar2(25), edad integer, constraint pk_trabajador primary key (seguro_social));
+
+--creacion de la segunda tabla
+create table nomina(id_nomina integer, seguro_social integer, sueldo_base float, horas_laboradas integer, fecha_pago date, constraint pk_id_nomina primary key(id_nomina), constraint 
+fk1_seguro_social foreign key (seguro_social) references trabajador(seguro_social));
+
+--creacion de secuencia para la nomina
+create sequence sec_nomina
+start with 1
+increment by 1
+nomaxvalue;
+
+insert into trabajador values(111,'ana', 28)
+
+insert into nomina (id_nomina, seguro_social, sueldo_base, horas_laboradas) values(1,'111', 1000, 8);
