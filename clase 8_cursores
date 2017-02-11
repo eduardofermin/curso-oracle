@@ -1,0 +1,26 @@
+--creacion de la tabla
+create table dance (id_dance integer, nombre varchar2(20), edad integer, constraint pk_id_dance primary key (id_dance));
+
+--insertar 4 registros en la tabla DANCE
+insert into dance values(4,'Jose',70);
+
+set serveroutput on;
+
+declare
+estatus varchar2(10);
+cursor cur1 is select*from dance; --declaracion del cursor
+begin
+for rec in cur1 loop
+if rec.edad<18 then
+  estatus:=' Precoz ';
+  dbms_output.put_line('__________________________________________');
+  dbms_output.put_line('| Nombre: ' || rec.nombre || ' | Edad: ' || rec.edad || ' | Estatus: ' || estatus || ' |');
+  dbms_output.put_line('__________________________________________');
+  else
+  estatus:=' Viejo ';
+  dbms_output.put_line('| Nombre: ' || rec.nombre || ' | Edad: ' || rec.edad || ' | Estatus: ' || estatus || ' |');
+  dbms_output.put_line('__________________________________________');
+  end if;
+end loop;
+end;
+/
