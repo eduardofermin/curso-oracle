@@ -1,0 +1,53 @@
+set serveroutput on;
+
+create table hobbie(id_hobbie integer, nombre varchar2(20), constraint pk_id_hobbie primary key (id_hobbie));
+
+create table direccion(id_direccion integer, calle varchar2(20), CP integer, estado varchar2(10), constraint pk_id_direccion primary key (id_direccion));
+
+create table usuario(id_usuario integer, nombre varchar2(20), email varchar2(20), login varchar(10), pass varchar2(10), hid_hobbie integer, did_direccion integer,
+constraint pk_id_usuario primary key (id_usuario), constraint fk1_hid_hobbie foreign key (hid_hobbie) references hobbie (id_hobbie), constraint fk2_did_direccion
+foreign key (did_direccion) references direccion (id_direccion));
+
+create sequence sec_hobbie
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_direccion
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_usuario
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace procedure guardar_hobbie (my_id_hobbie out integer, my_nombre in varchar2)
+as
+begin 
+select sec_hobbie.nextval into my_id_hobbie from dual;
+insert into hobbie (id_hobbie, nombre) values (my_id_hobbie, my_nombre);
+end;
+/
+
+create or replace procedure guardar_direccion (my_id_direccion out integer, my_calle in varchar2, my_CP in integer, my_estado in varchar2)
+as
+begin
+select sec_direccion.nextval into my_id_direccion from dual;
+insert into direccion (id_direccion, calle, CP, estado) values (my_id_direccion, my_calle, my_CP, my_estado);
+end;
+/
+
+create or replace procedure guardar_usuario(my_id_usuario out integer, my_nombre in varchar2, my_email in varchar2, my_login in varchar2, my_pass in varchar2)
+as
+begin
+select sec_usuario.nextval into my_id_usuario from dual;
+insert into usuario (id_usuario, nombre, email, login, pass) values (my_)
+
+declare
+valor integer;
+begin
+guardar_(valor, 'Juan', 23);
+end;
+/
