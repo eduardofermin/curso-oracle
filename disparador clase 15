@@ -1,0 +1,9 @@
+create table usuario_xxx(id integer, nombre varchar2(40), edad integer, primary key (id));                                                       
+
+create or replace trigger disp_usuario_xxx before insert on usuario_xxx for each row  
+begin
+if :NEW.edad < 18 then
+RAISE_APPLICATION_ERROR(-20000, 'Eres menor de edad');
+end if;
+end;
+/ 
