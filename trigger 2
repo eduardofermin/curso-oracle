@@ -1,0 +1,50 @@
+create table padre (id integer primary key,  nombre varchar2(40), edad integer);
+create table hijomayor (id integer primary key,  nombre varchar2(40), edad integer);
+create table hijomenor (id integer primary key,  nombre varchar2(40), edad integer);
+
+--creacion de trigger automatizado, inserta los datos en las tablas de hijomayor si la edad del registro es mayor de 18
+--y las inserta en hijomenor si la edad del registro es menor a 18
+
+create or replace trigger disp_papa after insert on padre for each row
+begin
+if :new.edad > 18 then
+insert into hijomayor values (:new.id, :new.nombre, :new.edad);
+else 
+insert into hijomenor values (:new.id, :new.nombre, :new.edad);
+end if;
+end;
+/
+
+--insertamos los registros
+
+insert into padre values (1,'juan',23);
+
+insert into padre values (2,'ana',15);
+
+--hecemos los select´s
+
+select * from padre;
+
+select * from hijomayor;
+
+select *from hijomenor;
+
+--------------------------------------------------------------------------------------------------------
+
+create table trabajador (id integer primary key, nombre varchar2(20), sueldo_base float);
+create table respaldo (id integer primary key, nombre varchar2(20), sueldo_base float);
+
+create or replace procedure generar_trabajador(my_id in integer, my_nombre in varchar2, my_sueldo_base in float)
+as
+begin
+insert into trabajador values(my_id, my_nombre, my_sueldo_base);
+end;
+/
+
+create or replace trigger disp_trabajador after insert on respaldo for each row
+begin
+if  < 4 then
+insert into respaldo values (:new.id, :new.nombre, :new.edad);
+end if;
+end;
+/
